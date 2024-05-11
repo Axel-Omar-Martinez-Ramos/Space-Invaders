@@ -1,0 +1,117 @@
+@startuml Space-Invaders
+
+class Juego
+{
+    -sonido:string
+    -velocidad:int
+    +Iniciar() 
+    +Pausar() 
+    +Finalizar() 
+}
+class CampoBatalla{
+    -colorfondo:string
+
+}
+
+class Jugador
+{
+    -vida:int
+    -puntaje:int
+    -record:int
+    +Morir()
+    +Reaparecer()
+    +Jugar()
+}
+
+class NaveEspacial
+{
+    -PosX:int
+    +MoverIzquierda()
+    +MoverDerecha() 
+    +Disparar() 
+    +Destruir()
+
+}
+
+class Proyectil
+{
+    -posY:int
+    +MoverArriba()
+    +MoverAbajo
+    +Matar()
+
+}
+
+class Enemigo
+{
+    -posX:int
+    -posY:int
+    -color:string
+    -valor:int
+    +Disparar()
+    +Morir()
+    +Aparecer()
+    +MoverAbajo()
+    +MoverDerecha()
+    +MoverIzquierda()
+
+
+}
+
+class EnemigoBonus{
+    -color:string
+    -velocidad:int
+    -posY:int
+    -valor:int
+    +Morir()
+    +Aparecer()
+    +MoverDerecha()
+    -MoverIzquierda
+
+}
+
+class Barrera
+{
+    -Forma:string
+    -color:string
+    -resistencia:int
+    +Proteger()
+    +RecibirDaño()
+
+     
+}
+
+class ObjetoDestructible
+{
+    +Destruir()
+    +Reaparecer()
+}
+
+class Pantalla
+{
+    +Mostrar() 
+    +Actualizar() 
+}
+
+
+Juego "1" *-- "1" Jugador
+Juego "1" o-- "1" Pantalla
+Jugador "1" o-- "1" NaveEspacial
+Jugador "1" o-- "*" Proyectil
+Juego "1" *-- "*" Enemigo
+Juego "1" *-- "*" Barrera
+
+Proyectil --o Enemigo
+
+
+ObjetoDestructible <|-- Enemigo
+ObjetoDestructible <|-- Proyectil
+ObjetoDestructible <|-- Barrera
+ObjetoDestructible <|-- EnemigoBonus
+Enemigo <|-- EnemigoBonus
+Juego o-- CampoBatalla
+CampoBatalla "1" o-- "*"ObjetoDestructible
+CampoBatalla "4" o-- "4" Barrera
+ObjetoDestructible "*" --o "1" Pantalla
+
+@enduml
