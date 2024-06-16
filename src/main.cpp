@@ -2,10 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <time.h>
-#include "Player.hpp"
-#include "Bullet.hpp"
-#include "Enemie.hpp"
-#include "Muro.hpp"
+#include <Player.hpp>
+#include <Bullet.hpp>
+#include <Enemie.hpp>
+#include <Muro.hpp>
 
 using namespace std;
 using namespace sf;
