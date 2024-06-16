@@ -4,13 +4,13 @@
 using namespace std;
 using namespace sf;
 
-class Proyectil : public Drawable {
+class Bullet : public Drawable {
 	private:
 		Sprite sprite;
 		int vel;
 	public:
-		Proyectil(int x, int y, Texture &texture, IntRect intRect, int v);
+		Bullet(int x, int y, Texture &texture, IntRect intRect, int v);
 		void Update();
 		Vector2f Pos();
-		virtual void draw(RenderTarget &rt, RenderStates rs) const; 
+		virtual void draw(RenderTarget &rt, RenderStates rs) const;
 };
