@@ -10,8 +10,12 @@ CPP_FILES := $(wildcard $(SRC_DIR)/*.cpp)
 # Generar los nombres de los archivos .exe en el directorio de destino
 EXE_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(BIN_DIR)/%.exe,$(CPP_FILES))
 
+# Crear el directorio bin si no existe
+$(BIN_DIR):
+	mkdir -p $(BIN_DIR)
+
 # Regla para compilar cada archivo .cpp y generar el archivo .exe correspondiente
-$(BIN_DIR)/%.exe: $(SRC_DIR)/%.cpp
+$(BIN_DIR)/%.exe: $(SRC_DIR)/%.cpp | $(BIN_DIR)
 	g++ $< -o $@ $(SFML) -Iinclude
 
 # Regla por defecto para compilar todos los archivos .cpp
@@ -23,14 +27,7 @@ run%: $(BIN_DIR)/%.exe
 
 # Regla para limpiar los archivos generados
 clean:
-	rm -f $(EXE_FILES)
-
-.PHONY: all clean
-.PHONY: run-%
-
-# Regla para limpiar los archivos generados
-clean:
-	rm -f $(EXE_FILES)
+	rm -f $(BIN_DIR)/*.exe
 
 .PHONY: all clean
 .PHONY: run-%
