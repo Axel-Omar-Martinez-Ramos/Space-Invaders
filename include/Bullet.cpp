@@ -4,7 +4,7 @@ Bullet::Bullet(int x, int y, Texture &texture, IntRect intRect, int v){
 	sprite.setTexture(texture);
 	sprite.setTextureRect(intRect);
 	sprite.setPosition(x,y);
-	sprite.setScale(3,3);d
+	sprite.setScale(3,3);
 	vel=v;
 }
 
