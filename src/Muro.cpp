@@ -42,3 +42,4 @@ void Muro::draw(RenderTarget &rt, RenderStates rs) const{
 		}
 	}
 }
+/**/

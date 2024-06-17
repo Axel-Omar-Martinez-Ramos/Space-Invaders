@@ -14,3 +14,4 @@ class Bullet : public Drawable {
 		Vector2f Pos();
 		virtual void draw(RenderTarget &rt, RenderStates rs) const;
 };
+/**/

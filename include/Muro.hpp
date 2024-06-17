@@ -16,3 +16,4 @@ class Muro : public Drawable{
 		void Colision(int indice, bool up);
 		virtual void draw(RenderTarget &rt, RenderStates rs) const;
 };
+/**/

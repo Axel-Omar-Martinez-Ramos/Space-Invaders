@@ -46,3 +46,4 @@ bool Player::Vivo(){
 void Player::draw(RenderTarget &rt, RenderStates rs) const{
 	rt.draw(sprite,rs);
 }
+/**/

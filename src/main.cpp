@@ -291,3 +291,4 @@ void UpdateMuro(vector<Muro> &muro,Bullet &bulletPlayer){
 	for(int i = 0; i < 3; i++) muro[i].Update();
 }
 
+/**/

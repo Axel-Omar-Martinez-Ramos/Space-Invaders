@@ -26,4 +26,4 @@ clean:
 	rm -f $(EXE_FILES)
 
 .PHONY: all clean
-.PHONY: run-%
+.PHONY: run-%     #

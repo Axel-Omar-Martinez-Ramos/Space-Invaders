@@ -20,3 +20,4 @@ class Enemie : public Drawable{
 		void AumentarCadencia();
 		virtual void draw(RenderTarget &rt, RenderStates rs) const;
 };
+/**/

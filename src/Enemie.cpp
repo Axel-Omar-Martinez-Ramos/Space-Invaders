@@ -39,3 +39,5 @@ void Enemie::AumentarCadencia(){
 void Enemie::draw(RenderTarget &rt, RenderStates rs) const{
 	rt.draw(sprite,rs);
 }
+
+/**/
