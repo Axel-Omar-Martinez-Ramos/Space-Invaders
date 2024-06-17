@@ -6,6 +6,7 @@
 #include <Bullet.hpp>
 #include <Enemie.hpp>
 #include <Muro.hpp>
+#include <SFML/Audio.hpp>
 
 using namespace std;
 using namespace sf;
@@ -38,10 +39,9 @@ IntRect muroRect;
 
 bool bulletActive = false;
 
-
 int main(){
 	
-	if(!spritesheet.loadFromFile("spritesheet.png")){
+	if(!spritesheet.loadFromFile("assets/images/space_invaders.png")){
 		cout<<"Error al cargar la textura\n";
 	}
 	
@@ -80,7 +80,17 @@ int main(){
 	RenderWindow window(VideoMode(600,600),"Space Invaders");
 	window.setFramerateLimit(60);
 
-	
+	sf::Music music;
+    if (!music.openFromFile("./assets/music/Y2meta.app-Space-Invaders-Aliens-Moving-Sound-_128-kbps_.ogg"))
+    {
+        // Error al cargar el archivo de música
+        return -1;
+    }
+
+    // Reproducir la música
+    music.setLoop(true);
+    music.play();
+
 	while(window.isOpen()){
 		
 		Event event;
