@@ -118,7 +118,11 @@ int main(){
 		
 		UpdateMuro(muro,bulletPlayer);
 		
-		if(!player.Vivo()){ system("clear"); cout<<"Perdiste\n"; window.close();}
+		if(!player.Vivo()){ 
+			system("clear"); 
+			sf::RenderWindow window(sf::VideoMode(800, 600), "GAME OVER");
+
+			}
 		
 		for(int i = 0; i < (int)enemies.size(); i++){
 			for(int j = 0; j < (int)enemies[i].size(); j++){
