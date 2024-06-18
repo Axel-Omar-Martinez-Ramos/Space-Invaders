@@ -19,4 +19,3 @@ Vector2f Bullet::Pos(){
 void Bullet::draw(RenderTarget &rt, RenderStates rs) const{
 	rt.draw(sprite,rs);
 }
-/**/

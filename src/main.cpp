@@ -11,7 +11,7 @@
 using namespace std;
 using namespace sf;
 
-void UpdatePlayer(Player &player, Bullet &bulletPlayer);
+void UpdatePlayer(Player &player, Bullet &bulletPlayer, Sound &laserSound);
 void UpdateBulletPlayer(Bullet &bulletPlayer, vector<vector<Enemie>> &enemies);
 void UpdateEnemies(vector<vector<Enemie>> &enemies);
 void UpdateBulletsEnemies(Player &player);
@@ -81,15 +81,25 @@ int main(){
 	window.setFramerateLimit(60);
 
 	sf::Music music;
-    if (!music.openFromFile("./assets/music/Y2meta.app-Space-Invaders-Aliens-Moving-Sound-_128-kbps_.ogg"))
-    {
-        // Error al cargar el archivo de música
-        return -1;
-    }
+	if (!music.openFromFile("./assets/music/Y2meta.app-Space-Invaders-Aliens-Moving-Sound-_128-kbps_.ogg"))
+	{
+		// Error al cargar el archivo de música
+		return -1;
+	}
 
-    // Reproducir la música
-    music.setLoop(true);
-    music.play();
+	// Reproducir la música
+	music.setLoop(true);
+	music.play();
+
+	sf::SoundBuffer laserBuffer;
+	if (!laserBuffer.loadFromFile("./assets/music/laser.ogg"))
+	{
+		// Error al cargar el archivo de sonido
+		return -1;
+	}
+
+	sf::Sound laserSound;
+	laserSound.setBuffer(laserBuffer);
 
 	while(window.isOpen()){
 		
@@ -98,7 +108,7 @@ int main(){
 			if(event.type==Event::Closed) window.close();
 		}
 		
-		UpdatePlayer(player,bulletPlayer);
+		UpdatePlayer(player,bulletPlayer, laserSound);
 				
 		UpdateBulletPlayer(bulletPlayer, enemies);
 		
@@ -156,7 +166,7 @@ int main(){
 	return 0;
 }
 
-void UpdatePlayer(Player &player, Bullet &bulletPlayer){
+void UpdatePlayer(Player &player, Bullet &bulletPlayer, Sound &laserSound){
 		
 		player.Update();
 		
@@ -164,6 +174,7 @@ void UpdatePlayer(Player &player, Bullet &bulletPlayer){
 			Bullet bullet(player.Pos().x+24,player.Pos().y+12,spritesheet,IntRect(13*8+16,6*8+6,8,8),-10);
 			bulletPlayer = bullet;
 			bulletActive=true;
+			laserSound.play();
 		}
 }
 
@@ -300,5 +311,3 @@ void UpdateMuro(vector<Muro> &muro,Bullet &bulletPlayer){
 	
 	for(int i = 0; i < 3; i++) muro[i].Update();
 }
-
-/**/

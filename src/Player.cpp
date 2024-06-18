@@ -16,7 +16,7 @@ void Player::Update(){
 	if(Keyboard::isKeyPressed(Keyboard::Left)&&sprite.getPosition().x+vel*-1>0){
 		sprite.move(vel*-1,0);
 	}
-	system("clear");
+	system("cls");
 	cout<<vida<<'\n';
 }
 
@@ -46,4 +46,3 @@ bool Player::Vivo(){
 void Player::draw(RenderTarget &rt, RenderStates rs) const{
 	rt.draw(sprite,rs);
 }
-/**/
