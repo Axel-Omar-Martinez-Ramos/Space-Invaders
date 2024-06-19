@@ -4,7 +4,7 @@
 using namespace std;
 using namespace sf;
 
-class Enemie : public Drawable{
+class Enemigo : public Drawable{
 	private:
 		Sprite sprite;
 		int vel;
@@ -13,7 +13,7 @@ class Enemie : public Drawable{
 		int timer;
 		Vector2f point; //Punto de inicio de los enemigos
 	public:
-		Enemie(int x, int y, Texture &texture, Vector2f p);
+		Enemigo(int x, int y, Texture &texture, Vector2f p);
 		void Update();
 		void ChangeDir();  //Metodo para cambiar la direccion de los enemigos
 		Vector2f Pos();  //Metodo para obtener la posicion de los enemigos

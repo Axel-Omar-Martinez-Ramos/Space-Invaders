@@ -5,7 +5,6 @@ class Juego
     -sonido:string
     -velocidad:int
     +Iniciar() 
-    +Pausar() 
     +Finalizar() 
 }
 class CampoBatalla{
@@ -16,11 +15,18 @@ class CampoBatalla{
 class Jugador
 {
     -vida:int
-    -puntaje:int
-    -record:int
+    -velocidad:int
+    --Texto:string
+    -Fuente:font
     +Morir()
-    +Reaparecer()
-    +Jugar()
+    +Ganar()
+    +Disparar()
+    +Posicion()
+    +QuitarVida()
+    +Vivir()
+    +Update()
+    +UpdateVida()
+    +Draw()
 }
 
 class NaveEspacial
@@ -33,50 +39,46 @@ class NaveEspacial
 
 }
 
-class Proyectil
+class Bala
 {
     -posY:int
-    +MoverArriba()
-    +MoverAbajo
+    -sprite:sprite
+    +Posicion()
+    +Update()
     +Matar()
+    +Draw()
 
 }
 
 class Enemigo
 {
-    -posX:int
-    -posY:int
+    -point:vector2f
     -color:string
     -valor:int
+    -estado:int
+    -cadencia:int
+    -timer:int
+    -vida:int
     +Disparar()
     +Morir()
     +Aparecer()
-    +MoverAbajo()
-    +MoverDerecha()
-    +MoverIzquierda()
+    +ChangeDirection()
+    +Posicion()
+    +AumentarCadencia() 
+    +Draw()
+    +Update()
 
 
 }
 
-class EnemigoBonus{
-    -color:string
-    -velocidad:int
-    -posY:int
-    -valor:int
-    +Morir()
-    +Aparecer()
-    +MoverDerecha()
-    -MoverIzquierda
-
-}
-
-class Barrera
+class Muro
 {
-    -Forma:string
+    -estado:vector pair
     -color:string
-    -resistencia:int
-    +Proteger()
-    +RecibirDaño()
+    +Posicion()
+    +Update()
+    +Colision()
+    +Draw()
 
      
 }
@@ -84,7 +86,7 @@ class Barrera
 class ObjetoDestructible
 {
     +Destruir()
-    +Reaparecer()
+    -color::string
 }
 
 class Pantalla
@@ -93,25 +95,40 @@ class Pantalla
     +Actualizar() 
 }
 
+class Menu{
+    -color:string
+    -fuente:font
+    -texto:string
+    +Mostrar()
+    +Actualizar()
+    +MoveUp()
+    +MoveDown()
+    +Draw()
+
+}
+
 
 Juego "1" *-- "1" Jugador
 Juego "1" o-- "1" Pantalla
+Juego "1" *-- "1" CampoBatalla
+Juego "1" *-- "1" Menu
 Jugador "1" o-- "1" NaveEspacial
-Jugador "1" o-- "*" Proyectil
+Jugador "1" o-- "*" Bala
 Juego "1" *-- "*" Enemigo
-Juego "1" *-- "*" Barrera
+Juego "1" *-- "3" Muro
 
-Proyectil --o Enemigo
+Enemigo "1" o-- "*" Bala
 
 
 ObjetoDestructible <|-- Enemigo
-ObjetoDestructible <|-- Proyectil
-ObjetoDestructible <|-- Barrera
-ObjetoDestructible <|-- EnemigoBonus
-Enemigo <|-- EnemigoBonus
+ObjetoDestructible <|-- Bala
+ObjetoDestructible <|-- Muro
+ObjetoDestructible <|-- Jugador
 Juego o-- CampoBatalla
 CampoBatalla "1" o-- "*"ObjetoDestructible
-CampoBatalla "4" o-- "4" Barrera
+CampoBatalla "1" o-- "3" Muro
 ObjetoDestructible "*" --o "1" Pantalla
+Menu "1" o-- "1" Pantalla
+
 
 @enduml

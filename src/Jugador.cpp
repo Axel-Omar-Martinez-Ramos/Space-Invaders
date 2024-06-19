@@ -1,7 +1,7 @@
-#include "Player.hpp"
+#include "Jugador.hpp"
 #include <iostream>
 
-Player::Player(int x, int y, sf::Texture &texture) {
+Jugador::Jugador(int x, int y, sf::Texture &texture) {
     sprite.setTexture(texture);
     sprite.setTextureRect(sf::IntRect(13 * 8 + 8, 7 * 8 + 7, 16, 8)); // Posición de comienzo y tamaño
     sprite.setPosition(x, y); // Posición inicial
@@ -18,11 +18,11 @@ Player::Player(int x, int y, sf::Texture &texture) {
     vidaText.setFont(font);
     vidaText.setCharacterSize(20);
     vidaText.setFillColor(sf::Color::White);
-    vidaText.setPosition(600.f, 600.f); // Posición del texto de vida inicial
+    vidaText.setPosition(10.f, 10.f); // Posición del texto de vida inicial
     UpdateVida(); // Actualizar el texto de vida inicial
 }
 
-void Player::Update() {
+void Jugador::Update() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && sprite.getPosition().x + vel < 552) {
         sprite.move(vel, 0); // Mover a la derecha
     }
@@ -31,34 +31,34 @@ void Player::Update() {
     }
 }
 
-bool Player::Shoot() {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !shoot) {
-        shoot = true; // Dispara
+bool Jugador::Disparar() {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !disparar) {
+        disparar = true; // Dispara
         return true;
     } else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-        shoot = false;
+        disparar = false;
     }
     return false;
 }
 
-sf::Vector2f Player::Pos() {
+sf::Vector2f Jugador::Pos() {
     return sprite.getPosition();
 }
 
-void Player::QuitarVida() {
+void Jugador::QuitarVida() {
     vida--;
     UpdateVida(); // Actualizar el texto de vida después de quitar vida
 }
 
-bool Player::Vivo() {
+bool Jugador::Vivo() {
     return (vida != 0);
 }
 
-void Player::draw(sf::RenderTarget &rt, sf::RenderStates rs) const {
+void Jugador::draw(sf::RenderTarget &rt, sf::RenderStates rs) const {
     rt.draw(sprite, rs);    // Dibujar el sprite del jugador
     rt.draw(vidaText, rs);  // Dibujar el texto de vida
 }
 
-void Player::UpdateVida() {
+void Jugador::UpdateVida() {
     vidaText.setString("Vida: " + std::to_string(vida)); // Actualizar el texto de vida con el valor actual de vida
 }

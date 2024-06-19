@@ -3,19 +3,19 @@
 
 #include <SFML/Graphics.hpp>
 
-class Player : public sf::Drawable {
+class Jugador : public sf::Drawable {
 private:
     sf::Sprite sprite;
     int vida;
     int vel;
-    bool shoot = false;  // La bala comienza en falso porque no se está presionando
+    bool disparar = false;  // La bala comienza en falso porque no se está presionando
     sf::Text vidaText;   // Texto para mostrar la vida
     sf::Font font;       // Fuente para el texto
 
 public:
-    Player(int x, int y, sf::Texture &texture); // Constructor
+    Jugador(int x, int y, sf::Texture &texture); // Constructor
     void Update();        // Método para saber si se presionó una tecla
-    bool Shoot();         // Método para saber si se dispara
+    bool Disparar();         // Método para saber si se dispara
     void QuitarVida();    // Método para quitar vida
     bool Vivo();          // Método para saber si está vivo
     sf::Vector2f Pos();   // Método para obtener la posición

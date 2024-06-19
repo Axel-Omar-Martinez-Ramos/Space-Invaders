@@ -2,9 +2,9 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <time.h>
-#include <Player.hpp>
-#include <Bullet.hpp>
-#include <Enemie.hpp>
+#include <Jugador.hpp>
+#include <Bala.hpp>
+#include <Enemigo.hpp>
 #include <Muro.hpp>
 #include <SFML/Audio.hpp>
 #include <Menu.hpp>
@@ -12,11 +12,11 @@
 using namespace std;
 using namespace sf;
 
-void UpdatePlayer(Player &player, Bullet &bulletPlayer, Sound &laserSound);  // Metodo para actualizar la accion jugador
-void UpdateBulletPlayer(Bullet &bulletPlayer, vector<vector<Enemie>> &enemies);  // Metodo para actualizar la bala del jugador
-void UpdateEnemies(vector<vector<Enemie>> &enemies);  // Metodo para actualizar el movimiento de los enemigos
-void UpdateBulletsEnemies(Player &player);  // Metodo para actualizar las balas enemigas
-void UpdateMuro(vector<Muro> &muro, Bullet &bulletPlayer);  // Metodo para actualizar los muros
+void UpdateJugador(Jugador &jugador, Bala &balaJugador, Sound &laserSound);  // Metodo para actualizar la accion jugador
+void UpdateBalaJugador(Bala &balaJugador, vector<vector<Enemigo>> &enemigos);  // Metodo para actualizar la bala del jugador
+void UpdateEnemigos(vector<vector<Enemigo>> &enemigos);  // Metodo para actualizar el movimiento de los enemigos
+void UpdateBalasEnemigos(Jugador &jugador);  // Metodo para actualizar las balas enemigas
+void UpdateMuro(vector<Muro> &muro, Bala &balaJugador);  // Metodo para actualizar los muros
 void ShowGameOver(RenderWindow &window);
 
 Texture spritesheet;
@@ -24,36 +24,36 @@ Texture spritesheet;
 int timer = 0;
 int cadencia = 200;  // Velocidad de los enemigos
 
-int dirEnemies = 1;  // Direccion de los enemigos
+int dirEnemigo = 1;  // Direccion de los enemigos
 int maxX, minX;
-int cantEnemies;  // Cantidad de enemigos
+int cantEnemigos;  // Cantidad de enemigos
 
-vector<Bullet> bulletsEnemies; // Vector de balas enemigas
+vector<Bala> balasEnemigos; // Vector de balas enemigas
 
 vector<pair<int, Vector2f>> posicionMuro;  // Posicion de los muros con ayuda del vector pair
 
 Vector2f sectionSpritesheet;  // Posicion de enemigos en spritesheet
 
-IntRect playerRect;
-IntRect bulletRect;
-IntRect enemieRect;
+IntRect jugadorRect;
+IntRect balaRect;
+IntRect enemigoRect;
 IntRect muroRect;
 
-bool bulletActive = false; // Permite disparar una bala a la vez
+bool balaActiva = false; // Permite disparar una bala a la vez
 
 void RunGame() {
     if (!spritesheet.loadFromFile("assets/images/space_invaders.png")) {
         cout << "Error al cargar la textura\n";
     }
 
-    Player player(288, 555, spritesheet);   /*Posicion de jugador*/
+    Jugador jugador(288, 555, spritesheet);   /*Posicion de jugador*/
 
-    Bullet bulletPlayer(0, 0, spritesheet, IntRect(0, 0, 0, 0), 0);
+    Bala balaJugador(0, 0, spritesheet, IntRect(0, 0, 0, 0), 0);
 
-    vector<vector<Enemie>> enemies(7, vector<Enemie>(12, Enemie(0, 0, spritesheet, Vector2f(0, 0))));
+    vector<vector<Enemigo>> enemigos(7, vector<Enemigo>(12, Enemigo(0, 0, spritesheet, Vector2f(0, 0))));
 
-    for (int i = 0; i < (int)enemies.size(); i++) {
-        for (int j = 0; j < (int)enemies[i].size(); j++) {
+    for (int i = 0; i < (int)enemigos.size(); i++) {
+        for (int j = 0; j < (int)enemigos[i].size(); j++) {
             if (i == 0) {
                 sectionSpritesheet = Vector2f(0, 0);  // Seleccion de personajes enemigos y animacion
             } else if (i < 3) {
@@ -63,7 +63,7 @@ void RunGame() {
             } else if (i < 7) {
                 sectionSpritesheet = Vector2f(0, 27);
             }
-            enemies[i][j] = Enemie(j * 30 + 24, i * 30 + 24, spritesheet, sectionSpritesheet);  // Posicion de enemigos en x, y
+            enemigos[i][j] = Enemigo(j * 30 + 24, i * 30 + 24, spritesheet, sectionSpritesheet);  // Posicion de enemigos en x, y
         }
     }
 
@@ -103,21 +103,21 @@ void RunGame() {
             }
         }
 
-        UpdatePlayer(player, bulletPlayer, laserSound);
-        UpdateBulletPlayer(bulletPlayer, enemies);
-        UpdateEnemies(enemies);
-        UpdateBulletsEnemies(player);
-        UpdateMuro(muro, bulletPlayer);
+        UpdateJugador(jugador, balaJugador, laserSound);
+        UpdateBalaJugador(balaJugador, enemigos);
+        UpdateEnemigos(enemigos);
+        UpdateBalasEnemigos(jugador);
+        UpdateMuro(muro, balaJugador);
 
-        if (!player.Vivo()) {
+        if (!jugador.Vivo()) {
             window.close();
             ShowGameOver(window);
             return;
         }
 
-        for (int i = 0; i < (int)enemies.size(); i++) {  // Recorre la matriz de enemigos y detecta si alguno llega al final de la pantalla
-            for (int j = 0; j < (int)enemies[i].size(); j++) {
-                if (enemies[i][j].Pos().y >= 480) {
+        for (int i = 0; i < (int)enemigos.size(); i++) {  // Recorre la matriz de enemigos y detecta si alguno llega al final de la pantalla
+            for (int j = 0; j < (int)enemigos[i].size(); j++) {
+                if (enemigos[i][j].Pos().y >= 480) {
                     cout << "Perdiste\n";
                     window.close();
                     ShowGameOver(window);
@@ -126,11 +126,11 @@ void RunGame() {
             }
         }
 
-        cantEnemies = 0;
+        cantEnemigos = 0;
 
-        for (int i = 0; i < (int)enemies.size(); i++) cantEnemies += (int)enemies[i].size();  // Recorre la matriz de enemigos y cuenta cuantos enemigos hay
+        for (int i = 0; i < (int)enemigos.size(); i++) cantEnemigos += (int)enemigos[i].size();  // Recorre la matriz de enemigos y cuenta cuantos enemigos hay
 
-        if (cantEnemies == 0) {
+        if (cantEnemigos == 0) {
             cout << "Ganaste\n";
             window.close();
             return;
@@ -138,21 +138,21 @@ void RunGame() {
 
         window.clear();
 
-        for (int i = 0; i < (int)bulletsEnemies.size(); i++) {
-            window.draw(bulletsEnemies[i]);
+        for (int i = 0; i < (int)balasEnemigos.size(); i++) {
+            window.draw(balasEnemigos[i]);
         }
 
-        if (bulletActive) window.draw(bulletPlayer);
+        if (balaActiva) window.draw(balaJugador);
 
-        for (int i = 0; i < (int)enemies.size(); i++) {
-            for (int j = 0; j < (int)enemies[i].size(); j++) {
-                window.draw(enemies[i][j]);
+        for (int i = 0; i < (int)enemigos.size(); i++) {
+            for (int j = 0; j < (int)enemigos[i].size(); j++) {
+                window.draw(enemigos[i][j]);
             }
         }
 
         for (int i = 0; i < 3; i++) window.draw(muro[i]);
 
-        window.draw(player);
+        window.draw(jugador);
 
         window.display(); /*Muestra la ventana*/
     }
@@ -160,7 +160,7 @@ void RunGame() {
 
 
 void ShowGameOver(RenderWindow &window) {
-    RenderWindow gameOverWindow(VideoMode(400, 200), "Game Over");
+    RenderWindow gameOverWindow(VideoMode(600, 600), "Game Over");
 
 	Music music;
 	music.stop();
@@ -218,7 +218,6 @@ int main() {
                         case sf::Keyboard::Return:
                             switch (menu.GetPressedItem()) {
                                 case 0:
-                                    std::cout << "Comenzar" << std::endl;
                                     window.close(); 
                                     RunGame(); 
                                     break;
@@ -243,39 +242,39 @@ int main() {
     return 0;
 }
 
-void UpdatePlayer(Player &player, Bullet &bulletPlayer, Sound &laserSound) { // Metodo para actualizar al jugador
-    player.Update();
+void UpdateJugador(Jugador &jugador, Bala &balaJugador, Sound &laserSound) { // Metodo para actualizar al jugador
+    jugador.Update();
 
-    if (player.Shoot() && !bulletActive) {  // Si se presiona la tecla espacio y no se esta disparando
-        Bullet bullet(player.Pos().x + 24, player.Pos().y + 12, spritesheet, IntRect(13 * 8 + 16, 6 * 8 + 6, 8, 8), -10);  // Crear bala y asignarle velocidad
-        bulletPlayer = bullet;  // Asignar bala
-        bulletActive = true;  // Activar bala
+    if (jugador.Disparar() && !balaActiva) {  // Si se presiona la tecla espacio y no se esta disparando
+        Bala bala(jugador.Pos().x + 24, jugador.Pos().y + 12, spritesheet, IntRect(13 * 8 + 16, 6 * 8 + 6, 8, 8), -10);  // Crear bala y asignarle velocidad
+        balaJugador = bala;  // Asignar bala
+        balaActiva = true;  // Activar bala
         laserSound.play();
     }
 }
 
-void UpdateBulletPlayer(Bullet &bulletPlayer, vector<vector<Enemie>> &enemies) { // Metodo para actualizar la bala del jugador
-    if (bulletActive) {
-        bulletPlayer.Update();
-        if (bulletPlayer.Pos().y < -24) bulletActive = false;  // Imposibilitar disparar cuando la bala sale de la pantalla
+void UpdateBalaJugador(Bala &balaJugador, vector<vector<Enemigo>> &enemigos) { // Metodo para actualizar la bala del jugador
+    if (balaActiva) {
+        balaJugador.Update();
+        if (balaJugador.Pos().y < -24) balaActiva = false;  // Imposibilitar disparar cuando la bala sale de la pantalla
 
-        bulletRect = IntRect(bulletPlayer.Pos().x, bulletPlayer.Pos().y, 3, 8);  // Rectangulo de la bala
-        for (int i = 0; i < (int)enemies.size(); i++) {  // Recorrer enemigos y detecta intersecciones de balas
-            for (int j = 0; j < (int)enemies[i].size(); j++) {
-                enemieRect = IntRect(enemies[i][j].Pos().x, enemies[i][j].Pos().y, 24, 24);
-                if (enemieRect.intersects(bulletRect)) {  // Si la bala intersecciona con un enemigo
-                    enemies[i].erase(enemies[i].begin() + j); // Elimina al enemigo que es interceptado
-                    bulletActive = false;  // Desactivar bala cuando intersecta a un enemigo
+        balaRect = IntRect(balaJugador.Pos().x, balaJugador.Pos().y, 3, 8);  // Rectangulo de la bala
+        for (int i = 0; i < (int)enemigos.size(); i++) {  // Recorrer enemigos y detecta intersecciones de balas
+            for (int j = 0; j < (int)enemigos[i].size(); j++) {
+                enemigoRect = IntRect(enemigos[i][j].Pos().x, enemigos[i][j].Pos().y, 24, 24);
+                if (enemigoRect.intersects(balaRect)) {  // Si la bala intersecciona con un enemigo
+                    enemigos[i].erase(enemigos[i].begin() + j); // Elimina al enemigo que es interceptado
+                    balaActiva = false;  // Desactivar bala cuando intersecta a un enemigo
 
                     break;
                 }
             }
-            if (!bulletActive) break;
+            if (!balaActiva) break;
         }
-        if (!bulletActive) {
-            for (int i = 0; i < (int)enemies.size(); i++) {
-                for (int j = 0; j < (int)enemies[i].size(); j++) {
-                    enemies[i][j].AumentarCadencia();
+        if (!balaActiva) {
+            for (int i = 0; i < (int)enemigos.size(); i++) {
+                for (int j = 0; j < (int)enemigos[i].size(); j++) {
+                    enemigos[i][j].AumentarCadencia();
                 }
             }
             cadencia--;  // Aumentar la velocidad de los enemigos de 1 en 1
@@ -283,90 +282,90 @@ void UpdateBulletPlayer(Bullet &bulletPlayer, vector<vector<Enemie>> &enemies) {
     }
 }
 
-void UpdateEnemies(vector<vector<Enemie>> &enemies) {
+void UpdateEnemigos(vector<vector<Enemigo>> &enemigos) {
     maxX = 0;  // Posicion maxima en x
     minX = 600;  // Posicion minima en x
-    for (int i = 0; i < (int)enemies.size(); i++) {  // Recorrer enemigos y detecta intersecciones de balas
-        for (int j = 0; j < (int)enemies[i].size(); j++) {
-            maxX = max(maxX, (int)enemies[i][j].Pos().x + 24 * dirEnemies);
-            minX = min(minX, (int)enemies[i][j].Pos().x + 24 * dirEnemies);
+    for (int i = 0; i < (int)enemigos.size(); i++) {  // Recorrer enemigos y detecta intersecciones de balas
+        for (int j = 0; j < (int)enemigos[i].size(); j++) {
+            maxX = max(maxX, (int)enemigos[i][j].Pos().x + 24 * dirEnemigo);
+            minX = min(minX, (int)enemigos[i][j].Pos().x + 24 * dirEnemigo);
         }
     }
 
     if (minX < 24 || maxX > 576) {  // Si los enemigos  salen de la pantalla
-        for (int i = 0; i < (int)enemies.size(); i++) {
-            for (int j = 0; j < (int)enemies[i].size(); j++) {
-                enemies[i][j].ChangeDir();
+        for (int i = 0; i < (int)enemigos.size(); i++) {
+            for (int j = 0; j < (int)enemigos[i].size(); j++) {
+                enemigos[i][j].ChangeDir();
             }
         }
-        dirEnemies *= -1;
+        dirEnemigo *= -1;
     }
 
-    for (int i = 0; i < (int)enemies.size(); i++) {
-        for (int j = 0; j < (int)enemies[i].size(); j++) {
-            enemies[i][j].Update();
+    for (int i = 0; i < (int)enemigos.size(); i++) {
+        for (int j = 0; j < (int)enemigos[i].size(); j++) {
+            enemigos[i][j].Update();
         }
     }
 
     timer++;
 
-    if (timer >= cadencia && (int)enemies[0].size() > 0) { // Va aumentando la dificultad entre mas enemigos se eliminan
+    if (timer >= cadencia && (int)enemigos[0].size() > 0) { // Va aumentando la dificultad entre mas enemigos se eliminan
         timer = 0;
         srand(time(NULL));
-        int enem = rand() % (int)enemies[0].size();  // Asigna a un enemigo aleatorio para disparar
-        Bullet bullet = Bullet(enemies[0][enem].Pos().x + 9, enemies[0][enem].Pos().y + 24, spritesheet, IntRect(13 * 8 + 8, 8 * 2 + 2, 8, 8), 10);  // Crear bala enemiga y asignarle velocidad
-        bulletsEnemies.push_back(bullet); // Agregar bala al vector de balas enemigas
+        int enem = rand() % (int)enemigos[0].size();  // Asigna a un enemigo aleatorio para disparar
+        Bala bala = Bala(enemigos[0][enem].Pos().x + 9, enemigos[0][enem].Pos().y + 24, spritesheet, IntRect(13 * 8 + 8, 8 * 2 + 2, 8, 8), 10);  // Crear bala enemiga y asignarle velocidad
+        balasEnemigos.push_back(bala); // Agregar bala al vector de balas enemigas
     }
 }
 
-void UpdateBulletsEnemies(Player &player) {
-    for (int i = 0; i < (int)bulletsEnemies.size(); i++) {
-        bulletsEnemies[i].Update();
+void UpdateBalasEnemigos(Jugador &jugador) {
+    for (int i = 0; i < (int)balasEnemigos.size(); i++) {
+        balasEnemigos[i].Update();
     }
 
-    for (int i = 0; i < (int)bulletsEnemies.size(); i++) {
-        if (bulletsEnemies[i].Pos().y > 600) {
-            bulletsEnemies.erase(bulletsEnemies.begin() + i);
+    for (int i = 0; i < (int)balasEnemigos.size(); i++) {
+        if (balasEnemigos[i].Pos().y > 600) {
+            balasEnemigos.erase(balasEnemigos.begin() + i);
         }
     }
 
-    playerRect = IntRect(player.Pos().x, player.Pos().y + 9, 48, 15);  // Posicion del jugador
-    for (int i = 0; i < (int)bulletsEnemies.size(); i++) {
-        bulletRect = IntRect(bulletsEnemies[i].Pos().x, bulletsEnemies[i].Pos().y, 3, 24);  // Posicion de la bala enemiga
-        if (playerRect.intersects(bulletRect)) {
-            bulletsEnemies.erase(bulletsEnemies.begin() + i);
-            player.QuitarVida();  // Quitar vida al jugador cuando la bala enemiga lo intersecta
+    jugadorRect = IntRect(jugador.Pos().x, jugador.Pos().y + 9, 48, 15);  // Posicion del jugador
+    for (int i = 0; i < (int)balasEnemigos.size(); i++) {
+        balaRect = IntRect(balasEnemigos[i].Pos().x, balasEnemigos[i].Pos().y, 3, 24);  // Posicion de la bala enemiga
+        if (jugadorRect.intersects(balaRect)) {
+            balasEnemigos.erase(balasEnemigos.begin() + i);
+            jugador.QuitarVida();  // Quitar vida al jugador cuando la bala enemiga lo intersecta
         }
     }
 }
 
-void UpdateMuro(vector<Muro> &muro, Bullet &bulletPlayer) {  // Metodo para recorrer los muros y detectar colisiones con las balas
-    if (bulletActive) {
-        bulletRect = IntRect(bulletPlayer.Pos().x, bulletPlayer.Pos().y, 3, 8);  // Detectar la posicion de la bala del jugador
+void UpdateMuro(vector<Muro> &muro, Bala &balaJugador) {  // Metodo para recorrer los muros y detectar colisiones con las balas
+    if (balaActiva) {
+        balaRect = IntRect(balaJugador.Pos().x, balaJugador.Pos().y, 3, 8);  // Detectar la posicion de la bala del jugador
         for (int i = 0; i < 3; i++) {
             muro[i].Pos(posicionMuro);
             for (int j = 0; j < (int)posicionMuro.size(); j++) {
                 muroRect = IntRect(posicionMuro[j].second.x, posicionMuro[j].second.y, 24, 24);  // Evaluar si la bala viene del jugador
-                if (muroRect.intersects(bulletRect)) {
+                if (muroRect.intersects(balaRect)) {
                     muro[i].Colision(posicionMuro[j].first, false);  // Evalua si la bala del jugador intersecta con un muro
-                    bulletActive = false;
+                    balaActiva = false;
                 }
             }
-            if (!bulletActive) break;
+            if (!balaActiva) break;
         }
     }
 
     bool elim = false;  // Eliminar bala enemiga
 
-    for (int h = 0; h < (int)bulletsEnemies.size(); h++) {  // Recorrer balas enemigas
-        bulletRect = IntRect(bulletsEnemies[h].Pos().x, bulletsEnemies[h].Pos().y, 3, 8);  // Evaluar si la bala viene del enemigo
+    for (int h = 0; h < (int)balasEnemigos.size(); h++) {  // Recorrer balas enemigas
+        balaRect = IntRect(balasEnemigos[h].Pos().x, balasEnemigos[h].Pos().y, 3, 8);  // Evaluar si la bala viene del enemigo
         for (int i = 0; i < 3; i++) {
             muro[i].Pos(posicionMuro);
             for (int j = 0; j < (int)posicionMuro.size(); j++) {
                 muroRect = IntRect(posicionMuro[j].second.x, posicionMuro[j].second.y, 24, 24);
-                if (muroRect.intersects(bulletRect)) {
+                if (muroRect.intersects(balaRect)) {
                     muro[i].Colision(posicionMuro[j].first, true);
-                    bulletsEnemies.erase(bulletsEnemies.begin() + h);
+                    balasEnemigos.erase(balasEnemigos.begin() + h);
                     elim = true;
                     break;
                 }
