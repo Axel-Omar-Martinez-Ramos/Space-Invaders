@@ -65,6 +65,7 @@ Para poder realizar commits de vscode es necesario tener instalado Git, descarga
 </li>
 
 ###INSTALAR LAS SIGUIENTES LIBRERIAS EN LA TERMINAL DE MSYS2:
+
 <li>
 
 https://code.visualstudio.com/docs/cpp/config-mingw
@@ -88,6 +89,7 @@ https://packages.msys2.org/package/mingw-w64-x86_64-box2d?repo=mingw64
 
 </li>
 
+### COMPLEMENTOS:
 
 <li>
   Material Icon Theme.
