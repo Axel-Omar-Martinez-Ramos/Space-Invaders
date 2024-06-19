@@ -36,17 +36,59 @@ y como editor se esta utilizando Visual Studio Code.
   Bin/: Contiene el archivo.exe ejecutable.
 </li>
 
-### LIBRERIAS INVOLUCRADAS
-***
-FTXUI: 
+### PROGRAMAS NECESARIOS:
 
-<code>git clone [link:]https://github.com/ArthurSonzogni/FTXUI.git</code>
-***
-GRAPHVIZ: 
+### Visual estudio code
+<li>
+Descargar e instalar vscode en el siguiente [Enlace.](https://code.visualstudio.com/)
+</li
 
-<code>sudo apt update
-sudo apt install graphviz </code>
-***
+### MSYS2 (Windows)
+<li>
+
+Instalar Msys2 usando el siguiente [Enlace.](https://github.com/msys2/msys2-installer/releases/download/2023-05-26/msys2-x86_64-20230526.exe)
+</li>
+Agregar los siguientes directorios al Path de Windows y reiniciar:
+
+> C:\msys64\mingw64\bin
+
+> C:\msys64\usr\bin
+
+### Github Desktop
+<li>
+Cliente de escritorio para clonar el repositorio, descargar usando el siguiente [enlace](https://desktop.github.com/).
+</li>
+
+### Git
+<li>
+Para poder realizar commits de vscode es necesario tener instalado Git, descargarlo del siguiente [enlace](https://git-scm.com/).
+</li>
+
+###INSTALAR LAS SIGUIENTES LIBRERIAS EN LA TERMINAL DE MSYS2:
+<li>
+
+https://code.visualstudio.com/docs/cpp/config-mingw
+
+> pacman -S --needed base-devel mingw-w64-x86_64-toolchain
+
+</li>
+<li>
+
+https://packages.msys2.org/package/mingw-w64-x86_64-sfml
+
+> pacman -S mingw-w64-x86_64-sfml
+</li>
+<li>
+
+https://box2d.org/documentation/
+
+https://packages.msys2.org/package/mingw-w64-x86_64-box2d?repo=mingw64
+
+> pacman -S mingw-w64-x86_64-box2d
+
+</li>
+
+
 <li>
   Material Icon Theme.
 </li>
