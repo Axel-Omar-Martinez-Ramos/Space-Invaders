@@ -32,6 +32,9 @@ y como editor se esta utilizando Visual Studio Code.
 <li>
   Docs/: Contiene archivos base del proyecto, como por ejemplo el diagrama de clases UML, etc.
 </li>
+<li>
+  Bin/: Contiene el archivo.exe ejecutable.
+</li>
 
 ### LIBRERIAS INVOLUCRADAS
 ***
