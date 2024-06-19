@@ -1,6 +1,6 @@
 #include "Bullet.hpp"
 
-Bullet::Bullet(int x, int y, Texture &texture, IntRect intRect, int v){
+Bullet::Bullet(int x, int y, Texture &texture, IntRect intRect, int v){   //Constructor
 	sprite.setTexture(texture);
 	sprite.setTextureRect(intRect);
 	sprite.setPosition(x,y);
@@ -8,14 +8,14 @@ Bullet::Bullet(int x, int y, Texture &texture, IntRect intRect, int v){
 	vel=v;
 }
 
-void Bullet::Update(){
+void Bullet::Update(){  //Metodo para mover la bala
 	sprite.move(0,vel);
 }
 
 Vector2f Bullet::Pos(){
-	return sprite.getPosition();
+	return sprite.getPosition();  //Metodo para obtener la posicion de la bala
 }
 	
-void Bullet::draw(RenderTarget &rt, RenderStates rs) const{
+void Bullet::draw(RenderTarget &rt, RenderStates rs) const{  //Metodo para dibujar la bala
 	rt.draw(sprite,rs);
 }

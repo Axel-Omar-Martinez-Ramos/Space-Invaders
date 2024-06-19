@@ -11,12 +11,12 @@ class Enemie : public Drawable{
 		int state;
 		int cadencia;
 		int timer;
-		Vector2f point;
+		Vector2f point; //Punto de inicio de los enemigos
 	public:
 		Enemie(int x, int y, Texture &texture, Vector2f p);
 		void Update();
-		void ChangeDir();
-		Vector2f Pos();
-		void AumentarCadencia();
-		virtual void draw(RenderTarget &rt, RenderStates rs) const;
+		void ChangeDir();  //Metodo para cambiar la direccion de los enemigos
+		Vector2f Pos();  //Metodo para obtener la posicion de los enemigos
+		void AumentarCadencia();  //Metodo para aumentar la velocidad de los enemigos
+		virtual void draw(RenderTarget &rt, RenderStates rs) const;  //Metodo para dibujar enemigo
 };

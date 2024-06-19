@@ -1,21 +1,27 @@
-#include <iostream>
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
+
 #include <SFML/Graphics.hpp>
 
-using namespace std;
-using namespace sf;
+class Player : public sf::Drawable {
+private:
+    sf::Sprite sprite;
+    int vida;
+    int vel;
+    bool shoot = false;  // La bala comienza en falso porque no se está presionando
+    sf::Text vidaText;   // Texto para mostrar la vida
+    sf::Font font;       // Fuente para el texto
 
-class Player : public Drawable{
-	private:
-		Sprite sprite;
-		int vida;
-		int vel;
-		bool shoot=false;
-	public:
-		Player(int x, int y, Texture &texture);
-		void Update();
-		bool Shoot();
-		void QuitarVida();
-		bool Vivo();
-		Vector2f Pos();
-		virtual void draw(RenderTarget &rt, RenderStates rs) const;
+public:
+    Player(int x, int y, sf::Texture &texture); // Constructor
+    void Update();        // Método para saber si se presionó una tecla
+    bool Shoot();         // Método para saber si se dispara
+    void QuitarVida();    // Método para quitar vida
+    bool Vivo();          // Método para saber si está vivo
+    sf::Vector2f Pos();   // Método para obtener la posición
+    virtual void draw(sf::RenderTarget &rt, sf::RenderStates rs) const override; // Método para dibujar
+    void UpdateVida();    // Actualizar el texto de vida
 };
+
+#endif // PLAYER_HPP
+
