@@ -1,72 +1,48 @@
 @startuml Space-Invaders
 
-class Juego
-{
-    -sonido:string
-    -velocidad:int
-    +Iniciar() 
-    +Finalizar() 
-}
-class CampoBatalla{
-    -colorfondo:string
-
-}
-
 class Jugador
 {
     -vida:int
     -velocidad:int
-    --Texto:string
+    -vidaText:Text
+    -fuente:font
     -Fuente:font
-    +Morir()
-    +Ganar()
+    -sprite:Sprite
     +Disparar()
     +Posicion()
     +QuitarVida()
-    +Vivir()
+    +Vivo()
     +Update()
     +UpdateVida()
     +Draw()
+    +Pos()
 }
 
-class NaveEspacial
-{
-    -PosX:int
-    +MoverIzquierda()
-    +MoverDerecha() 
-    +Disparar() 
-    +Destruir()
-
-}
 
 class Bala
 {
-    -posY:int
-    -sprite:sprite
-    +Posicion()
+    -sprite:Sprite
+    -velocidad:int
     +Update()
-    +Matar()
+    +Pos()
     +Draw()
 
 }
 
 class Enemigo
 {
-    -point:vector2f
-    -color:string
-    -valor:int
-    -estado:int
-    -cadencia:int
-    -timer:int
-    -vida:int
-    +Disparar()
-    +Morir()
-    +Aparecer()
-    +ChangeDirection()
-    +Posicion()
-    +AumentarCadencia() 
-    +Draw()
-    +Update()
+   -sprite:Sprite
+   -vel:int
+   -state:int
+   -cadencia:int
+   -timer:int
+   -point:Vector2f
+   +Update()
+   +Pos()
+   +ChangeDir()
+   +Pos()
+   +AumentarCadencia()
+   +Draw()
 
 
 }
@@ -74,8 +50,8 @@ class Enemigo
 class Muro
 {
     -estado:vector pair
-    -color:string
-    +Posicion()
+    -state:int
+    +Pos()
     +Update()
     +Colision()
     +Draw()
@@ -83,52 +59,37 @@ class Muro
      
 }
 
-class ObjetoDestructible
-{
-    +Destruir()
-    -color::string
-}
-
-class Pantalla
-{
-    +Mostrar() 
-    +Actualizar() 
-}
 
 class Menu{
-    -color:string
-    -fuente:font
-    -texto:string
-    +Mostrar()
-    +Actualizar()
+    -font:Font  
+    -menu:Text
+    selectedItemIndex:int
+    +Menu()
+    +Draw()
     +MoveUp()
     +MoveDown()
-    +Draw()
+    +GetPressedItem()
+
 
 }
 
 
-Juego "1" *-- "1" Jugador
-Juego "1" o-- "1" Pantalla
-Juego "1" *-- "1" CampoBatalla
-Juego "1" *-- "1" Menu
-Jugador "1" o-- "1" NaveEspacial
 Jugador "1" o-- "*" Bala
-Juego "1" *-- "*" Enemigo
-Juego "1" *-- "3" Muro
-
 Enemigo "1" o-- "*" Bala
+Jugador "1" o-- "3" Muro
+Jugador "1" *-- "*" Enemigo
+Menu "1" --* "*" Jugador
+Enemigo <-- Drawable
+Muro <-- Drawable
+Bala <-- Drawable
+Jugador <-- Drawable
 
 
-ObjetoDestructible <|-- Enemigo
-ObjetoDestructible <|-- Bala
-ObjetoDestructible <|-- Muro
-ObjetoDestructible <|-- Jugador
-Juego o-- CampoBatalla
-CampoBatalla "1" o-- "*"ObjetoDestructible
-CampoBatalla "1" o-- "3" Muro
-ObjetoDestructible "*" --o "1" Pantalla
-Menu "1" o-- "1" Pantalla
+
+
+
+
+
 
 
 @enduml
