@@ -79,10 +79,10 @@ Enemigo "1" o-- "*" Bala
 Jugador "1" o-- "3" Muro
 Jugador "1" *-- "*" Enemigo
 Menu "1" --* "*" Jugador
-Enemigo <-- Drawable
-Muro <-- Drawable
-Bala <-- Drawable
-Jugador <-- Drawable
+Enemigo <|-- Drawable
+Muro <|-- Drawable
+Bala <|-- Drawable
+Jugador <|-- Drawable
 
 
 
